@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.universalgravitylab.clientapp.controller.NewSimulationController"
+            prefHeight="180.0" prefWidth="200.0">
+        <children>
+            <TableView layoutX="14.0" layoutY="45.0" prefHeight="340.0" prefWidth="624.0" AnchorPane.bottomAnchor="81.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="45.0">
+                <columns>
+                    <TableColumn prefWidth="75.0" text="Name" />
+                    <TableColumn prefWidth="75.0" text="Mass" />
+                    <TableColumn prefWidth="75.0" text="Color" />
+                    <TableColumn minWidth="30.0" prefWidth="150.0" text="Position" />
+                    <TableColumn minWidth="30.0" prefWidth="150.0" text="Velocity" />
+                </columns>
+            </TableView>
+            <Button defaultButton="true" layoutX="466.0" layoutY="428.0" mnemonicParsing="false" text="Create" />
+            <Button cancelButton="true" layoutX="544.0" layoutY="428.0" mnemonicParsing="false" text="Cancel" />
+            <Button layoutX="24.0" layoutY="416.0" mnemonicParsing="false" text="New Body" />
+            <Button layoutX="121.0" layoutY="416.0" mnemonicParsing="false" text="Edit Body" />
+            <Button layoutX="214.0" layoutY="416.0" mnemonicParsing="false" text="Delete Body" />
+            <Label layoutX="24.0" layoutY="14.0" text="Name:" />
+            <TextField layoutX="76.0" layoutY="10.0" promptText="Enter Name" />
+        </children>
+
+</AnchorPane>

@@ -1,9 +1,11 @@
 package com.universalgravitylab.clientapp.controller;
 
+import com.universalgravitylab.clientapp.Closable;
 import com.universalgravitylab.clientapp.model.Body;
 import com.universalgravitylab.clientapp.model.Simulation;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class SimulationController {
+public class SimulationController implements Closable {
 
     public static final int NUM_STEPS = 1_000;     // number of iterations
     public static final int ITERATIONS_PER_STEP = 10000;
@@ -82,6 +84,7 @@ public class SimulationController {
 
     }
 
+
     private void updateAnimation() {
         gc.save();
         gc.setFill(Color.WHITE);
@@ -135,4 +138,8 @@ public class SimulationController {
     }
 
 
+    @Override
+    public void onClose(Event event) {
+        onStopSimulation(null);
+    }
 }

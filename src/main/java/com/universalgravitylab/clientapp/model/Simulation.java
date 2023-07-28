@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Simulation {
 
+    private String name;
+
     public static final double G = 6.6743e-11;
 
     private int numSteps;
@@ -14,7 +16,8 @@ public class Simulation {
 
     private List<Body> bodyList = new ArrayList<>();
 
-    public Simulation(int numSteps, int iterationsPerStep) {
+    public Simulation(String name, int numSteps, int iterationsPerStep) {
+        this.name = name;
         this.numSteps = numSteps;
         this.iterationsPerStep = iterationsPerStep;
         dt = 24 * 60 * 60d / iterationsPerStep;      // time step (s)
@@ -87,5 +90,13 @@ public class Simulation {
 
     public List<Body> getBodyList() {
         return bodyList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getNumSteps() {
+        return numSteps;
     }
 }

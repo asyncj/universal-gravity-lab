@@ -13,15 +13,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class SimulationController implements Closable {
-
-    public static final int NUM_STEPS = 1_000;     // number of iterations
-    public static final int ITERATIONS_PER_STEP = 10000;
-    public static double M_SUN = 1.9891e30;   // mass of the Sun
-    public static double M_EARTH = 5.9891e24;   // mass of the Sun
 
     public static final double AU = 149_597_870_700d;
 
@@ -36,11 +29,7 @@ public class SimulationController implements Closable {
     private Simulation simulation;
 
     private int pos;
-
-    // Define initial conditions for planet
-    double[] r0 = {1.496e11, 0, 0};        // initial position (m)
-    double[] v0 = {0, 2.9783e4, 0};        // initial velocity (m/s)
-    double[] a0 = {0, 0, 0};               // initial acceleration (m/s^2)
+    private int numSteps;
 
     private boolean play = true;
     private GraphicsContext gc;
@@ -48,42 +37,44 @@ public class SimulationController implements Closable {
     @FXML
     private void initialize() {
         progressBar.setMin(1);
-        progressBar.setMax(NUM_STEPS);
+        progressBar.setMax(numSteps);
         progressBar.valueProperty().addListener((observable, oldValue, newValue) -> {
             pos = (int) progressBar.getValue() - 1;
             updateAnimation();
         });
 
-        simulation = new Simulation(NUM_STEPS, ITERATIONS_PER_STEP);
-        List<Body> bodyList = simulation.getBodyList();
-        bodyList.add(new Body(M_SUN, NUM_STEPS, new double[]{0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.YELLOW));
-        bodyList.add(new Body(M_EARTH, NUM_STEPS, r0, v0, a0, Color.BLUE));
-
         gc = canvas.getGraphicsContext2D();
+    }
 
-        simulation.runSimulation();
+    public void setSimulation(Simulation simulation) {
+        this.simulation = simulation;
+    }
+
+    public void startAnimation() {
 
         timer = new AnimationTimer() {
             long lastTime = System.nanoTime();
             @Override
             public void handle(long now) {
-                double elapsedTime = (now - lastTime) / 5_000_000.0;
                 lastTime = now;
 
                 updateAnimation();
 
                 pos++;
                 onUpdateSimulation(pos);
-                if (pos >= NUM_STEPS) {
+                if (pos >= numSteps) {
                     pos = 0;
                 }
 
             }
         };
         timer.start();
-
     }
 
+    public void setNumSteps(int numSteps) {
+        this.numSteps = numSteps;
+        progressBar.setMax(numSteps);
+    }
 
     private void updateAnimation() {
         gc.save();
@@ -116,7 +107,7 @@ public class SimulationController implements Closable {
     @FXML
     public void onChangeRight(ActionEvent event) {
         pos += 10;
-        if (pos >= NUM_STEPS) pos = NUM_STEPS - 1;
+        if (pos >= numSteps) pos = numSteps - 1;
         updateAnimation();
         progressBar.adjustValue(pos + 1);
     }

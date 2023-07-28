@@ -1,8 +1,8 @@
 package com.universalgravitylab.clientapp;
 
+import com.universalgravitylab.clientapp.controller.SimulationController;
 import com.universalgravitylab.clientapp.model.Simulation;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import com.universalgravitylab.clientapp.service.SimulationService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,8 +18,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.universalgravitylab.clientapp.service.SimulationService.SUN_EARTH;
 
 /*
 --module-path ${PATH_TO_FX} --add-modules javafx.controls,javafx.fxml
@@ -30,32 +33,35 @@ public class MainController {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Autowired
+    private SimulationService simulationService;
+
     @FXML
     private TreeView treeView;
 
     @FXML
-    private Tab newSimulationTab;
-
-    @FXML
     private TabPane tabPane;
 
-    private List<Simulation> simulationList = new ArrayList<>();
+    private Map<String, Simulation> simulationMap = new LinkedHashMap<>();
 
     @FXML
     private void initialize() {
-        treeView.setRoot(new TreeItem("Sun/Earth"));
+        List<Simulation> simulationList = simulationService.getSimulationList();
+
+        for (Simulation simulation: simulationList) {
+            treeView.setRoot(new TreeItem(simulation.getName()));
+            simulation.runSimulation();
+            simulationMap.put(simulation.getName(), simulation);
+        }
 
         loadCurrentTab();
 
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 (ov, t, t1) -> loadCurrentTab()
         );
-        treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                createTab("simulation");
-            }
-        });
+        treeView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> createTab("simulation")
+        );
     }
 
     private void createTab(String id) {
@@ -84,7 +90,15 @@ public class MainController {
 
                 currentTab.setContent(root);
                 Closable closable = fxmlLoader.getController();
-                currentTab.setOnClosed(event -> closable.onClose(event));
+                currentTab.setOnClosed(closable::onClose);
+                if (fxmlLoader.getController() instanceof SimulationController) {
+                    SimulationController controller = fxmlLoader.getController();
+                    Simulation simulation = simulationMap.get(SUN_EARTH);
+                    controller.setNumSteps(simulation.getNumSteps());
+                    controller.setSimulation(simulation);
+
+                    controller.startAnimation();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -106,7 +120,14 @@ public class MainController {
     @FXML
     private void onEditSimulation(ActionEvent event) {
         event.consume();
-        createTab("simulation");
+        String newSimulationName = "Edit Simulation";
+        boolean nonMatch = tabPane.getTabs().stream().noneMatch(tab -> tab.getText().equals(newSimulationName));
+        if (nonMatch) {
+            Tab tab = new Tab(newSimulationName);
+            tab.setId("newSimulation");
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
+        }
     }
 
     @FXML

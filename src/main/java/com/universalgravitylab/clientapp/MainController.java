@@ -1,5 +1,6 @@
 package com.universalgravitylab.clientapp;
 
+import com.universalgravitylab.clientapp.controller.NewSimulationController;
 import com.universalgravitylab.clientapp.controller.SimulationController;
 import com.universalgravitylab.clientapp.model.Simulation;
 import com.universalgravitylab.clientapp.service.SimulationService;
@@ -53,6 +54,7 @@ public class MainController {
             simulation.runSimulation();
             simulationMap.put(simulation.getName(), simulation);
         }
+        tabPane.getTabs().get(0).setUserData(treeView.getRoot().getValue());
 
         loadCurrentTab();
 
@@ -72,6 +74,7 @@ public class MainController {
         if (nonMatch) {
             Tab tab = new Tab(selectedTreeItem.getValue());
             tab.setId(id);
+            tab.setUserData(selectedTreeItem.getValue());
             tabPane.getTabs().add(tab);
         }
     }
@@ -93,11 +96,17 @@ public class MainController {
                 currentTab.setOnClosed(closable::onClose);
                 if (fxmlLoader.getController() instanceof SimulationController) {
                     SimulationController controller = fxmlLoader.getController();
-                    Simulation simulation = simulationMap.get(SUN_EARTH);
+                    Simulation simulation = simulationMap.get((String)currentTab.getUserData());
                     controller.setNumSteps(simulation.getNumSteps());
                     controller.setSimulation(simulation);
 
                     controller.startAnimation();
+                }
+                if (fxmlLoader.getController() instanceof NewSimulationController) {
+                    NewSimulationController controller = fxmlLoader.getController();
+                    Simulation simulation = simulationMap.get((String)currentTab.getUserData());
+                    controller.setSimulation(simulation);
+                    controller.updateUI();
                 }
             }
         } catch (IOException e) {
@@ -124,6 +133,9 @@ public class MainController {
         boolean nonMatch = tabPane.getTabs().stream().noneMatch(tab -> tab.getText().equals(newSimulationName));
         if (nonMatch) {
             Tab tab = new Tab(newSimulationName);
+            TreeItem<String>  selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+
+            tab.setUserData(selectedItem.getValue());
             tab.setId("newSimulation");
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);

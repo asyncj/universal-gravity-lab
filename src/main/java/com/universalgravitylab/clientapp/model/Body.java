@@ -6,6 +6,7 @@ public class Body {
 
     private int numSteps;
 
+    private String name;
     private double mass;
 
     private double[] r0;
@@ -22,7 +23,8 @@ public class Body {
     private double[][] v;
     private double[][] a;
 
-    public Body(double mass, int numSteps, double[] r0, double[] v0, double[] a0, Color color) {
+    public Body(String name, double mass, int numSteps, double[] r0, double[] v0, double[] a0, Color color) {
+        this.name = name;
         this.mass = mass;
         this.numSteps = numSteps;
         this.r0 = r0;
@@ -100,6 +102,10 @@ public class Body {
 
     public double getMass() {
         return mass;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Color getColor() {

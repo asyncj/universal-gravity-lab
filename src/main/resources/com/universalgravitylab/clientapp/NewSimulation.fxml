@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.universalgravitylab.clientapp.controller.NewSimulationController">
         <children>
-            <TableView layoutX="14.0" layoutY="45.0" prefHeight="340.0" prefWidth="624.0" AnchorPane.bottomAnchor="81.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="45.0">
+            <TableView fx:id="bodyTable" layoutX="14.0" layoutY="45.0" prefHeight="340.0" prefWidth="624.0" AnchorPane.bottomAnchor="81.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="45.0">
                 <columns>
                     <TableColumn prefWidth="75.0" text="Name" />
                     <TableColumn prefWidth="75.0" text="Mass" />

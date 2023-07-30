@@ -11,11 +11,11 @@
         <children>
             <TableView fx:id="bodyTable" layoutX="14.0" layoutY="45.0" prefHeight="340.0" prefWidth="624.0" AnchorPane.bottomAnchor="81.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="45.0">
                 <columns>
-                    <TableColumn prefWidth="75.0" text="Name" />
-                    <TableColumn prefWidth="75.0" text="Mass" />
-                    <TableColumn prefWidth="75.0" text="Color" />
-                    <TableColumn minWidth="30.0" prefWidth="150.0" text="Position" />
-                    <TableColumn minWidth="30.0" prefWidth="150.0" text="Velocity" />
+                    <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Name" />
+                    <TableColumn fx:id="massColumn" prefWidth="75.0" text="Mass" />
+                    <TableColumn fx:id="colorColumn" prefWidth="75.0" text="Color" />
+                    <TableColumn fx:id="positionColumn" minWidth="30.0" prefWidth="150.0" text="Position" />
+                    <TableColumn fx:id="velocityColumn" minWidth="30.0" prefWidth="150.0" text="Velocity" />
                 </columns>
             </TableView>
             <Button defaultButton="true" layoutX="466.0" layoutY="428.0" mnemonicParsing="false" text="Create" />

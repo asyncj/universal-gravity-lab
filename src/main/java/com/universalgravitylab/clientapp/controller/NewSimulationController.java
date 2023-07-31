@@ -73,8 +73,9 @@ public class NewSimulationController implements Closable, Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Body, String>("name"));
-        massColumn.setCellValueFactory(new PropertyValueFactory<Body, Double>("mass"));
-        colorColumn.setCellValueFactory(new PropertyValueFactory<Body, Color>("color"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        massColumn.setCellValueFactory(new PropertyValueFactory<>("mass"));
+        colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
+        colorColumn.setCellFactory(factory -> new ColoredTableCell());
     }
 }

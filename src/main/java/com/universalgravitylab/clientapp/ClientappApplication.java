@@ -15,7 +15,6 @@ public class ClientappApplication extends Application {
 
     private ConfigurableApplicationContext applicationContext;
 
-
     @Override
     public void init() {
         applicationContext = new SpringApplicationBuilder(ClientappApplication.class).run();
@@ -30,8 +29,6 @@ public class ClientappApplication extends Application {
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-
-
 
         primaryStage.show();
     }

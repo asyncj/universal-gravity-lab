@@ -41,10 +41,10 @@ public class NewSimulationController implements Closable, Initializable {
     private TableColumn<Body, Color> colorColumn;
 
     @FXML
-    private TableColumn<Body, String> positionColumn;
+    private TableColumn<Body, double[]> positionColumn;
 
     @FXML
-    private TableColumn<Body, String> velocityColumn;
+    private TableColumn<Body, double[]> velocityColumn;
 
     @Override
     public void onClose(Event event) {
@@ -77,5 +77,9 @@ public class NewSimulationController implements Closable, Initializable {
         massColumn.setCellValueFactory(new PropertyValueFactory<>("mass"));
         colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
         colorColumn.setCellFactory(factory -> new ColoredTableCell());
+        positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
+        positionColumn.setCellFactory(param -> new DoubleArrayCell());
+        velocityColumn.setCellValueFactory(new PropertyValueFactory<>("velocity"));
+        velocityColumn.setCellFactory(param -> new DoubleArrayCell());
     }
 }

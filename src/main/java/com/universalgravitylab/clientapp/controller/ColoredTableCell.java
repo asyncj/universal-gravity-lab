@@ -12,9 +12,11 @@ public class ColoredTableCell extends javafx.scene.control.TableCell<com.univers
             setGraphic(null);
         } else {
             Body body = getTableRow().getItem();
-            String colorAsString = getColorAsString(body.getColor());
-            setText(colorAsString);
-            setStyle("-fx-background-color: " + colorAsString);
+            if (body != null) {
+                String colorAsString = getColorAsString(body.getColor());
+                setText(colorAsString);
+                setStyle("-fx-background-color: " + colorAsString);
+            }
         }
     }
 

@@ -77,9 +77,9 @@ public class NewSimulationController implements Closable, Initializable {
         massColumn.setCellValueFactory(new PropertyValueFactory<>("mass"));
         colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
         colorColumn.setCellFactory(factory -> new ColoredTableCell());
-        positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
+        positionColumn.setCellValueFactory(new PropertyValueFactory<>("r0"));
         positionColumn.setCellFactory(param -> new DoubleArrayCell());
-        velocityColumn.setCellValueFactory(new PropertyValueFactory<>("velocity"));
+        velocityColumn.setCellValueFactory(new PropertyValueFactory<>("v0"));
         velocityColumn.setCellFactory(param -> new DoubleArrayCell());
     }
 }

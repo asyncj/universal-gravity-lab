@@ -12,6 +12,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
@@ -66,6 +68,14 @@ public class MainController {
         );
     }
 
+    @FXML
+    private void onMouseClicked(MouseEvent event) {
+        Object selectedItem = treeView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null && event.getButton() == MouseButton.PRIMARY) {
+            createTab("simulation");
+        }
+    }
+
     private void createTab(String id) {
         Object selectedItem = treeView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) return;
@@ -76,6 +86,7 @@ public class MainController {
             tab.setId(id);
             tab.setUserData(selectedTreeItem.getValue());
             tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
         }
     }
 
@@ -123,6 +134,7 @@ public class MainController {
             Tab tab = new Tab(newSimulationName);
             tab.setId("newSimulation");
             tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
         }
     }
 
@@ -161,6 +173,7 @@ public class MainController {
             Tab tab = new Tab(newBodyName);
             tab.setId("newBody");
             tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
         }
     }
 }

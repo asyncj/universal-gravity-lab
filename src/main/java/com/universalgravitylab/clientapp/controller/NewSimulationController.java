@@ -66,6 +66,9 @@ public class NewSimulationController implements Closable, Initializable {
     }
 
     public void updateUI() {
+        if (simulation == null) {
+            return;
+        }
         List<Body> bodyList = simulation.getBodyList();
         ObservableList<Body> bodies = FXCollections.observableArrayList(bodyList);
         bodyTable.setItems(bodies);

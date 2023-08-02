@@ -39,7 +39,10 @@ public class SimulationController implements Closable {
         progressBar.setMin(1);
         progressBar.setMax(numSteps);
         progressBar.valueProperty().addListener((observable, oldValue, newValue) -> {
-            pos = (int) progressBar.getValue() - 1;
+            pos = newValue.intValue() - 1;
+            if (pos < 0) {
+                pos = 0;
+            }
             updateAnimation();
         });
 

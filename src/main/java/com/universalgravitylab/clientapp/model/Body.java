@@ -2,6 +2,8 @@ package com.universalgravitylab.clientapp.model;
 
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
+
 public class Body {
 
     private int numSteps;
@@ -9,9 +11,14 @@ public class Body {
     private String name;
     private double mass;
 
+    private double[] rInit;
+    private double[] vInit;
+    private double[] aInit;
+
     private double[] r0;
     private double[] v0;
     private double[] a0;
+
     private Color color;
 
     // Define next conditions
@@ -27,6 +34,9 @@ public class Body {
         this.name = name;
         this.mass = mass;
         this.numSteps = numSteps;
+        this.rInit = Arrays.copyOf(r0, r0.length);
+        this.vInit = Arrays.copyOf(v0, v0.length);
+        this.aInit = Arrays.copyOf(a0, a0.length);
         this.r0 = r0;
         this.v0 = v0;
         this.a0 = a0;
@@ -122,5 +132,17 @@ public class Body {
 
     public double[][] getA() {
         return a;
+    }
+
+    public double[] getRInit() {
+        return rInit;
+    }
+
+    public double[] getVInit() {
+        return vInit;
+    }
+
+    public double[] getAInit() {
+        return aInit;
     }
 }

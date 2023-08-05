@@ -26,13 +26,6 @@
             <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS">
               <tabs>
                 <Tab fx:id="simulation" text="Sun/Earth">
-
-                  </Tab>
-                  <Tab fx:id="newSimulation" text="New Simulation">
-
-                  </Tab>
-                <Tab fx:id="newBody" text="New Body">
-
                   </Tab>
               </tabs>
             </TabPane>
@@ -101,11 +94,11 @@
    <left>
       <TreeView id="treeView" fx:id="treeView" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <contextMenu>
-            <ContextMenu>
+            <ContextMenu fx:id="treeViewContextMenu" onShowing="#onTreeViewContextMenuShowing">
               <items>
                   <MenuItem mnemonicParsing="false" onAction="#newSimulation" text="New Simulation" />
-                  <MenuItem mnemonicParsing="false" onAction="#onEditSimulation" text="Edit Simulation" />
-                  <MenuItem mnemonicParsing="false" onAction="#onDeleteSimulation" text="Delete Simulation" />
+                  <MenuItem fx:id="editSimulationItem" mnemonicParsing="false" onAction="#onEditSimulation" text="Edit Simulation" />
+                  <MenuItem fx:id="deleteSimulationItem" mnemonicParsing="false" onAction="#onDeleteSimulation" text="Delete Simulation" />
               </items>
             </ContextMenu>
          </contextMenu></TreeView>

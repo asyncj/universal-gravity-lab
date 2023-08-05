@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class NewSimulationController implements Closable, Initializable {
     @Autowired
     private MainController mainController;
     private Simulation simulation;
+
+    @FXML
+    private TextField bodyTextField;
 
     @FXML
     private TableView<Body> bodyTable;
@@ -69,6 +73,7 @@ public class NewSimulationController implements Closable, Initializable {
         if (simulation == null) {
             return;
         }
+        bodyTextField.setText(simulation.getName());
         List<Body> bodyList = simulation.getBodyList();
         ObservableList<Body> bodies = FXCollections.observableArrayList(bodyList);
         bodyTable.setItems(bodies);
@@ -80,9 +85,9 @@ public class NewSimulationController implements Closable, Initializable {
         massColumn.setCellValueFactory(new PropertyValueFactory<>("mass"));
         colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
         colorColumn.setCellFactory(factory -> new ColoredTableCell());
-        positionColumn.setCellValueFactory(new PropertyValueFactory<>("r0"));
+        positionColumn.setCellValueFactory(new PropertyValueFactory<>("rInit"));
         positionColumn.setCellFactory(param -> new DoubleArrayCell());
-        velocityColumn.setCellValueFactory(new PropertyValueFactory<>("v0"));
+        velocityColumn.setCellValueFactory(new PropertyValueFactory<>("vInit"));
         velocityColumn.setCellFactory(param -> new DoubleArrayCell());
     }
 }

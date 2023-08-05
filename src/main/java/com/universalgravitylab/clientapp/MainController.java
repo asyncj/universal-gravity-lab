@@ -8,12 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.WindowEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
@@ -44,6 +42,12 @@ public class MainController {
 
     @FXML
     private TabPane tabPane;
+
+    @FXML
+    private MenuItem editSimulationItem;
+
+    @FXML
+    private MenuItem deleteSimulationItem;
 
     private Map<String, Simulation> simulationMap = new LinkedHashMap<>();
 
@@ -146,7 +150,9 @@ public class MainController {
         if (nonMatch) {
             Tab tab = new Tab(newSimulationName);
             TreeItem<String>  selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
-
+            if (selectedItem == null) {
+                return;
+            }
             tab.setUserData(selectedItem.getValue());
             tab.setId("newSimulation");
             tabPane.getTabs().add(tab);
@@ -165,6 +171,15 @@ public class MainController {
         int exitCode = SpringApplication.exit(applicationContext, () -> 0);
         System.exit(exitCode);
     }
+
+
+    @FXML
+    public void onTreeViewContextMenuShowing(WindowEvent event) {
+        TreeItem<String>  selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+        editSimulationItem.setDisable(selectedItem == null);
+        deleteSimulationItem.setDisable(selectedItem == null);
+    }
+
 
     public void onNewBody() {
         String newBodyName = "New Body";

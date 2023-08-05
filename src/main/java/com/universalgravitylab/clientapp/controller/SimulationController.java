@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
+import javafx.stage.WindowEvent;
 import org.springframework.stereotype.Component;
 
 @Component

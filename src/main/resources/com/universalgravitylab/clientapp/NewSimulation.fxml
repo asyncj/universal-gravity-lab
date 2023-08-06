@@ -18,11 +18,11 @@
                     <TableColumn fx:id="velocityColumn" minWidth="30.0" prefWidth="150.0" text="Velocity" />
                 </columns>
             </TableView>
-            <Button defaultButton="true" layoutX="466.0" layoutY="428.0" mnemonicParsing="false" text="Create" />
-            <Button cancelButton="true" layoutX="544.0" layoutY="428.0" mnemonicParsing="false" text="Cancel" />
-            <Button layoutX="24.0" layoutY="416.0" mnemonicParsing="false" onAction="#onNewBody" text="New Body" />
-            <Button layoutX="121.0" layoutY="416.0" mnemonicParsing="false" text="Edit Body" />
-            <Button layoutX="214.0" layoutY="416.0" mnemonicParsing="false" text="Delete Body" />
+            <Button fx:id="createButton" defaultButton="true" layoutX="466.0" layoutY="428.0" mnemonicParsing="false" text="Create" />
+            <Button cancelButton="true" layoutX="544.0" layoutY="428.0" mnemonicParsing="false" onAction="#onCancelButton" text="Cancel" />
+            <Button fx:id="newBodyButton" layoutX="24.0" layoutY="416.0" mnemonicParsing="false" onAction="#onNewBody" text="New Body" />
+            <Button fx:id="editBodyButton" disable="true" layoutX="121.0" layoutY="416.0" mnemonicParsing="false" text="Edit Body" />
+            <Button fx:id="deleteBodyButton" disable="true" layoutX="214.0" layoutY="416.0" mnemonicParsing="false" text="Delete Body" />
             <Label layoutX="24.0" layoutY="14.0" text="Name:" />
             <TextField fx:id="bodyTextField" layoutX="76.0" layoutY="10.0" promptText="Enter Name" />
         </children>

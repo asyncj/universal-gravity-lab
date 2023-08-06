@@ -191,4 +191,8 @@ public class MainController {
             tabPane.getSelectionModel().select(tab);
         }
     }
+
+    public void onCancelTab(String tabName) {
+        tabPane.getTabs().removeIf(tab -> tab.getText().equalsIgnoreCase(tabName));
+    }
 }

@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -50,6 +51,18 @@ public class NewSimulationController implements Closable, Initializable {
     @FXML
     private TableColumn<Body, double[]> velocityColumn;
 
+    @FXML
+    private Button newBodyButton;
+
+    @FXML
+    private Button editBodyButton;
+
+    @FXML
+    private Button deleteBodyButton;
+
+    @FXML
+    private Button createButton;
+
     @Override
     public void onClose(Event event) {
 
@@ -59,6 +72,11 @@ public class NewSimulationController implements Closable, Initializable {
     private void onNewBody(ActionEvent event) {
         mainController.onNewBody();
         System.out.println("onNewBody");
+    }
+
+    @FXML
+    private void onCancelButton(ActionEvent event) {
+        mainController.onCancelTab("Edit Simulation");
     }
 
     public void setSimulation(Simulation simulation) {
@@ -77,6 +95,7 @@ public class NewSimulationController implements Closable, Initializable {
         List<Body> bodyList = simulation.getBodyList();
         ObservableList<Body> bodies = FXCollections.observableArrayList(bodyList);
         bodyTable.setItems(bodies);
+        createButton.setText("Save");
     }
 
     @Override
@@ -89,5 +108,15 @@ public class NewSimulationController implements Closable, Initializable {
         positionColumn.setCellFactory(param -> new DoubleArrayCell());
         velocityColumn.setCellValueFactory(new PropertyValueFactory<>("vInit"));
         velocityColumn.setCellFactory(param -> new DoubleArrayCell());
+
+        bodyTable.getSelectionModel().selectedItemProperty().addListener(
+                (ov, t, t1) -> updateButtons()
+        );
+    }
+
+    private void updateButtons() {
+        Body selectedItem = bodyTable.getSelectionModel().getSelectedItem();
+        editBodyButton.setDisable(selectedItem == null);
+        deleteBodyButton.setDisable(selectedItem == null);
     }
 }

@@ -75,6 +75,13 @@ public class NewSimulationController implements Closable, Initializable {
     }
 
     @FXML
+    private void onEditBody(ActionEvent event) {
+        Body body = bodyTable.getSelectionModel().getSelectedItem();
+        mainController.onEditBody(body);
+        System.out.println("onEditBody");
+    }
+
+    @FXML
     private void onCancelButton(ActionEvent event) {
         mainController.onCancelTab("Edit Simulation");
     }

@@ -1,7 +1,9 @@
 package com.universalgravitylab.clientapp;
 
+import com.universalgravitylab.clientapp.controller.NewBodyController;
 import com.universalgravitylab.clientapp.controller.NewSimulationController;
 import com.universalgravitylab.clientapp.controller.SimulationController;
+import com.universalgravitylab.clientapp.model.Body;
 import com.universalgravitylab.clientapp.model.Simulation;
 import com.universalgravitylab.clientapp.service.SimulationService;
 import javafx.event.ActionEvent;
@@ -123,6 +125,12 @@ public class MainController {
                     controller.setSimulation(simulation);
                     controller.updateUI();
                 }
+                if (fxmlLoader.getController() instanceof NewBodyController) {
+                    NewBodyController controller = fxmlLoader.getController();
+                    Body body = (Body) currentTab.getUserData();
+                    controller.setBody(body);
+                    controller.updateUI();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -194,5 +202,17 @@ public class MainController {
 
     public void onCancelTab(String tabName) {
         tabPane.getTabs().removeIf(tab -> tab.getText().equalsIgnoreCase(tabName));
+    }
+
+    public void onEditBody(Body body) {
+        String editBodyName = "Edit Body";
+        boolean nonMatch = tabPane.getTabs().stream().noneMatch(tab -> tab.getText().equals(editBodyName));
+        if (nonMatch) {
+            Tab tab = new Tab(editBodyName);
+            tab.setUserData(body);
+            tab.setId("newBody");
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
+        }
     }
 }

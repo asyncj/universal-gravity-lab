@@ -65,7 +65,7 @@
    <right>
       <Accordion BorderPane.alignment="CENTER">
         <panes>
-          <TitledPane animated="false" text="Properties">
+          <TitledPane animated="false" text="Simulation">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -75,12 +75,22 @@
                   </AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="false" text="Properties">
+          <TitledPane animated="false" text="Body">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Name:" />
+                        <TextField layoutX="14.0" layoutY="31.0" />
+                        <Label layoutX="14.0" layoutY="124.0" text="Position:" />
+                        <TextField layoutX="14.0" layoutY="141.0" />
+                        <Label layoutX="14.0" layoutY="177.0" text="Velocity:" />
+                        <TextField layoutX="14.0" layoutY="194.0" />
+                        <Label layoutX="14.0" layoutY="66.0" text="Mass:" />
+                        <TextField layoutX="14.0" layoutY="83.0" />
+                     </children></AnchorPane>
             </content>
           </TitledPane>
-          <TitledPane animated="false" text="untitled 3">
+          <TitledPane animated="false" text="Camera">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>

@@ -26,6 +26,8 @@ public class ClientappApplication extends Application {
         fxmlLoader.setControllerFactory(applicationContext::getBean);
         fxmlLoader.setRoot(new BorderPane());
 
+        primaryStage.setTitle("Universal Gravity Lab");
+
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

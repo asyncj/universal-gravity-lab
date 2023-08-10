@@ -82,13 +82,22 @@ public class SimulationController implements Closable {
 
     private void updateAnimation() {
         gc.save();
-        gc.setFill(Color.WHITE);
+        gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        int k = 100;
         for (int i = 0; i < simulation.getBodyList().size(); i++) {
             Body body = simulation.getBodyList().get(i);
 
+            for (int j = pos - k; j < pos; j++) {
+                if (j > 0) {
+                    Color color = body.getColor();
+                    double opacity = (pos - j) / (double)k;
+                    gc.setFill(color.deriveColor(0, 1, 1, 1 - opacity));
+                    gc.fillOval(250 + body.getR()[j][0] / AU * 100 - 1, 200 + body.getR()[j][1] / AU * 100 - 1, 2, 2);
+                }
+            }
             gc.setFill(body.getColor());
-            gc.fillOval(250 + body.getR()[pos][0] / AU * 100, 200 + body.getR()[pos][1] / AU * 100, 15, 15);
+            gc.fillOval(250 + body.getR()[pos][0] / AU * 100 - 8, 200 + body.getR()[pos][1] / AU * 100 - 8, 16, 16);
         }
         gc.restore();
     }

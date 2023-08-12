@@ -34,8 +34,8 @@ public class SimulationService implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         Simulation simulation = new Simulation(SUN_EARTH, NUM_STEPS, ITERATIONS_PER_STEP);
         List<Body> bodyList = simulation.getBodyList();
-        bodyList.add(new Body("Sun", M_SUN, NUM_STEPS, new double[]{0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.YELLOW));
-        bodyList.add(new Body("Earth", M_EARTH, NUM_STEPS, r0, v0, a0, Color.BLUE));
+        bodyList.add(new Body("Sun", M_SUN, 6.957E8, NUM_STEPS, new double[]{0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.YELLOW));
+        bodyList.add(new Body("Earth", M_EARTH, 6371000, NUM_STEPS, r0, v0, a0, Color.BLUE));
         simulationList.add(simulation);
     }
 }

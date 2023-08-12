@@ -10,6 +10,7 @@ public class Body {
 
     private String name;
     private double mass;
+    private double radius;
 
     private double[] rInit;
     private double[] vInit;
@@ -30,9 +31,10 @@ public class Body {
     private double[][] v;
     private double[][] a;
 
-    public Body(String name, double mass, int numSteps, double[] r0, double[] v0, double[] a0, Color color) {
+    public Body(String name, double mass, double radius, int numSteps, double[] r0, double[] v0, double[] a0, Color color) {
         this.name = name;
         this.mass = mass;
+        this.radius = radius;
         this.numSteps = numSteps;
         this.rInit = Arrays.copyOf(r0, r0.length);
         this.vInit = Arrays.copyOf(v0, v0.length);
@@ -42,7 +44,7 @@ public class Body {
         this.a0 = a0;
         this.color = color;
         r = new double[numSteps][3];
-        v = new double[numSteps][3];
+        this.v = new double[numSteps][3];
         a = new double[numSteps][3];
     }
 
@@ -144,5 +146,9 @@ public class Body {
 
     public double[] getAInit() {
         return aInit;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 }

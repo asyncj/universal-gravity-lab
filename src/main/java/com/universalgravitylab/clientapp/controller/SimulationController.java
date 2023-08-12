@@ -11,7 +11,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
-import javafx.stage.WindowEvent;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -97,7 +96,12 @@ public class SimulationController implements Closable {
                 }
             }
             gc.setFill(body.getColor());
-            gc.fillOval(250 + body.getR()[pos][0] / AU * 100 - 8, 200 + body.getR()[pos][1] / AU * 100 - 8, 16, 16);
+            double h = 16 + 8 * (Math.log10(body.getRadius()) - Math.log10(6371000));
+            double x = 250 + body.getR()[pos][0] / AU * 100 - h / 2.0;
+            double y = 200 + body.getR()[pos][1] / AU * 100 - h / 2.0;
+            gc.fillOval(x, y, h, h);
+            String name = body.getName();
+            gc.fillText(name, x + 18, y - 6);
         }
         gc.restore();
     }

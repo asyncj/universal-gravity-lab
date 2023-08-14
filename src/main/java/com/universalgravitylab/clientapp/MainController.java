@@ -66,17 +66,16 @@ public class MainController {
         }
         TreeItem<String> root = treeView.getRoot();
         root.setExpanded(true);
-        tabPane.getTabs().get(0).setUserData(root.getChildren().get(1).getValue());
-
-        loadCurrentTab();
 
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 (ov, t, t1) -> loadCurrentTab()
         );
-        treeView.getSelectionModel().select(1);
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> createTab("simulation")
         );
+        treeView.getSelectionModel().select(1);
+        treeView.getSelectionModel().select(2);
+
     }
 
     @FXML
@@ -119,7 +118,7 @@ public class MainController {
                 currentTab.setOnClosed(closable::onClose);
                 if (fxmlLoader.getController() instanceof SimulationController) {
                     SimulationController controller = fxmlLoader.getController();
-                    Simulation simulation = simulationMap.get((String)currentTab.getUserData());
+                    Simulation simulation = simulationMap.get(currentTab.getUserData());
                     controller.setNumSteps(simulation.getNumSteps());
                     controller.setSimulation(simulation);
 

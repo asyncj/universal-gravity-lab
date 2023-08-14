@@ -32,6 +32,9 @@ public class Simulation {
                 for (int m = 0; m < bodyList.size(); m++) {
 
                     Body bodyTo = bodyList.get(m);
+                    if (bodyTo.isStationary()) {
+                        continue;
+                    }
                     double[] r0 = bodyTo.getR0();
                     double[] v0 = bodyTo.getV0();
                     double[] a0 = bodyTo.getA0();

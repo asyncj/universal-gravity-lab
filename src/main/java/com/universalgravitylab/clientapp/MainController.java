@@ -40,7 +40,7 @@ public class MainController {
     private SimulationService simulationService;
 
     @FXML
-    private TreeView treeView;
+    private TreeView<String> treeView;
 
     @FXML
     private TabPane tabPane;
@@ -57,18 +57,23 @@ public class MainController {
     private void initialize() {
         List<Simulation> simulationList = simulationService.getSimulationList();
 
+        TreeItem<String> simulationsItem = new TreeItem<>("Simulations");
+        treeView.setRoot(simulationsItem);
         for (Simulation simulation: simulationList) {
-            treeView.setRoot(new TreeItem(simulation.getName()));
+            simulationsItem.getChildren().add(new TreeItem<>(simulation.getName()));
             simulation.runSimulation();
             simulationMap.put(simulation.getName(), simulation);
         }
-        tabPane.getTabs().get(0).setUserData(treeView.getRoot().getValue());
+        TreeItem<String> root = treeView.getRoot();
+        root.setExpanded(true);
+        tabPane.getTabs().get(0).setUserData(root.getChildren().get(1).getValue());
 
         loadCurrentTab();
 
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 (ov, t, t1) -> loadCurrentTab()
         );
+        treeView.getSelectionModel().select(1);
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> createTab("simulation")
         );
@@ -86,11 +91,12 @@ public class MainController {
         Object selectedItem = treeView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) return;
         TreeItem<String> selectedTreeItem = (TreeItem<String>) selectedItem;
-        boolean nonMatch = tabPane.getTabs().stream().noneMatch(tab -> tab.getText().equals(selectedTreeItem.getValue()));
-        if (nonMatch) {
-            Tab tab = new Tab(selectedTreeItem.getValue());
+        String treeItemName = selectedTreeItem.getValue();
+        boolean nonMatch = tabPane.getTabs().stream().noneMatch(tab -> tab.getText().equals(treeItemName));
+        if (nonMatch && !treeItemName.equals("Simulations")) {
+            Tab tab = new Tab(treeItemName);
             tab.setId(id);
-            tab.setUserData(selectedTreeItem.getValue());
+            tab.setUserData(treeItemName);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
         }
@@ -157,7 +163,7 @@ public class MainController {
         boolean nonMatch = tabPane.getTabs().stream().noneMatch(tab -> tab.getText().equals(newSimulationName));
         if (nonMatch) {
             Tab tab = new Tab(newSimulationName);
-            TreeItem<String>  selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+            TreeItem<String>  selectedItem = treeView.getSelectionModel().getSelectedItem();
             if (selectedItem == null) {
                 return;
             }
@@ -183,7 +189,7 @@ public class MainController {
 
     @FXML
     public void onTreeViewContextMenuShowing(WindowEvent event) {
-        TreeItem<String>  selectedItem = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+        TreeItem<String>  selectedItem = treeView.getSelectionModel().getSelectedItem();
         editSimulationItem.setDisable(selectedItem == null);
         deleteSimulationItem.setDisable(selectedItem == null);
     }

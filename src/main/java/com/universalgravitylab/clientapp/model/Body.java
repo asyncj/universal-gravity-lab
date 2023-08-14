@@ -12,6 +12,9 @@ public class Body {
     private double mass;
     private double radius;
 
+    private boolean isStar;
+    private boolean isStationary;
+
     private double[] rInit;
     private double[] vInit;
     private double[] aInit;
@@ -31,7 +34,8 @@ public class Body {
     private double[][] v;
     private double[][] a;
 
-    public Body(String name, double mass, double radius, int numSteps, double[] r0, double[] v0, double[] a0, Color color) {
+    public Body(String name, double mass, double radius, int numSteps, double[] r0, double[] v0, double[] a0, Color color, boolean isStar,
+                boolean isStationary) {
         this.name = name;
         this.mass = mass;
         this.radius = radius;
@@ -42,10 +46,15 @@ public class Body {
         this.r0 = r0;
         this.v0 = v0;
         this.a0 = a0;
+        System.arraycopy(r0, 0, r1, 0, r1.length);
+        System.arraycopy(v0, 0, v1, 0, v1.length);
+        System.arraycopy(a0, 0, a1, 0, a1.length);
         this.color = color;
-        r = new double[numSteps][3];
+        this.r = new double[numSteps][3];
         this.v = new double[numSteps][3];
-        a = new double[numSteps][3];
+        this.a = new double[numSteps][3];
+        this.isStar = isStar;
+        this.isStationary = isStationary;
     }
 
     public double[] getR0() {
@@ -150,5 +159,13 @@ public class Body {
 
     public double getRadius() {
         return radius;
+    }
+
+    public boolean isStar() {
+        return isStar;
+    }
+
+    public boolean isStationary() {
+        return isStationary;
     }
 }

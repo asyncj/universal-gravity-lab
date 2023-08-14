@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Slider;
+import javafx.scene.effect.Glow;
 import javafx.scene.paint.Color;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,8 @@ public class SimulationController implements Closable {
     private boolean play = true;
     private GraphicsContext gc;
 
+    private Glow glow = new Glow();
+
     @FXML
     private void initialize() {
         progressBar.setMin(1);
@@ -47,6 +50,7 @@ public class SimulationController implements Closable {
         });
 
         gc = canvas.getGraphicsContext2D();
+        glow.setLevel(0.75);
     }
 
     public void setSimulation(Simulation simulation) {
@@ -100,6 +104,10 @@ public class SimulationController implements Closable {
             double x = 250 + body.getR()[pos][0] / AU * 100 - h / 2.0;
             double y = 200 + body.getR()[pos][1] / AU * 100 - h / 2.0;
             gc.fillOval(x, y, h, h);
+            if (body.isStar()) {
+                glow.setLevel(0.75);
+                gc.applyEffect(glow);
+            }
             String name = body.getName();
             gc.fillText(name, x + 18, y - 6);
         }

@@ -59,8 +59,8 @@ public class SimulationService implements InitializingBean {
         bodyList.add(new Body("Sun #1", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, -sunRadius * 50, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
         bodyList.add(new Body("Sun #2", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, sunRadius * 50, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
 
-        bodyList.add(new Body("Earth", M_EARTH, 6371000, NUM_STEPS, new double[]{1.496e11, 0, 0}, new double[]{0, 2.9783e4 * 1.0, 0}, new double[]{0, 0, 0}, Color.valueOf(earthColor), false, false));
-        bodyList.add(new Body("Venus", M_VENUS, 6051800, NUM_STEPS, new double[]{-1.082e11, 0, 0}, new double[]{0, -3.5023e4 * 1.0, 0}, new double[]{0, 0, 0}, Color.valueOf(venusColor), false, false));
+        bodyList.add(new Body("Earth", M_EARTH, 6371000, NUM_STEPS, new double[]{1.496e11, 0, 0}, new double[]{0, 2.9783e4 * 0.99, 0}, new double[]{0, 0, 0}, Color.valueOf(earthColor), false, false));
+        bodyList.add(new Body("Venus", M_VENUS, 6051800, NUM_STEPS, new double[]{-1.082e11, 0, 0}, new double[]{0, -3.5023e4 * 0.98, 0}, new double[]{0, 0, 0}, Color.valueOf(venusColor), false, false));
         simulationList.add(simulation);
 
 

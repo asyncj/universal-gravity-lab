@@ -87,7 +87,7 @@ public class SimulationController implements Closable {
         gc.save();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        int k = 100;
+        int k = 400;
         for (int i = 0; i < simulation.getBodyList().size(); i++) {
             Body body = simulation.getBodyList().get(i);
 

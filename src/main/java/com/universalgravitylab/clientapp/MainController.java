@@ -67,6 +67,8 @@ public class MainController {
         TreeItem<String> root = treeView.getRoot();
         root.setExpanded(true);
 
+        tabPane.getTabs().get(0).setUserData(simulationsItem.getChildren().get(0).getValue());
+
         tabPane.getSelectionModel().selectedItemProperty().addListener(
                 (ov, t, t1) -> loadCurrentTab()
         );
@@ -75,7 +77,6 @@ public class MainController {
         );
         treeView.getSelectionModel().select(1);
         treeView.getSelectionModel().select(2);
-
     }
 
     @FXML

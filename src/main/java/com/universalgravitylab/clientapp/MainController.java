@@ -61,7 +61,7 @@ public class MainController {
         treeView.setRoot(simulationsItem);
         for (Simulation simulation: simulationList) {
             simulationsItem.getChildren().add(new TreeItem<>(simulation.getName()));
-            simulation.runSimulation();
+            //simulation.runSimulation();
             simulationMap.put(simulation.getName(), simulation);
         }
         TreeItem<String> root = treeView.getRoot();
@@ -75,8 +75,8 @@ public class MainController {
         treeView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> createTab("simulation")
         );
-        treeView.getSelectionModel().select(1);
-        treeView.getSelectionModel().select(2);
+
+        treeView.getSelectionModel().select(4);
     }
 
     @FXML
@@ -122,6 +122,7 @@ public class MainController {
                     Simulation simulation = simulationMap.get(currentTab.getUserData());
                     controller.setNumSteps(simulation.getNumSteps());
                     controller.setSimulation(simulation);
+                    simulation.runSimulation();
 
                     controller.startAnimation();
                 }

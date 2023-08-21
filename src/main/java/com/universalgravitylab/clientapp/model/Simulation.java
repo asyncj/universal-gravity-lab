@@ -13,14 +13,16 @@ public class Simulation {
     private int iterationsPerStep;
 
     private double dt;
+    private double scale;
 
     private List<Body> bodyList = new ArrayList<>();
 
-    public Simulation(String name, int numSteps, int iterationsPerStep) {
+    public Simulation(String name, int numSteps, int iterationsPerStep, double scale, double dt) {
         this.name = name;
         this.numSteps = numSteps;
         this.iterationsPerStep = iterationsPerStep;
-        dt = 24 * 60 * 60d / iterationsPerStep;      // time step (s)
+        this.dt = dt;      // time step (s)
+        this.scale = scale;
     }
 
     public void runSimulation() {
@@ -101,5 +103,9 @@ public class Simulation {
 
     public int getNumSteps() {
         return numSteps;
+    }
+
+    public double getScale() {
+        return scale;
     }
 }

@@ -1,5 +1,7 @@
 package com.universalgravitylab.clientapp.model;
 
+import com.universalgravitylab.clientapp.service.VelocityTerm;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class Simulation {
     private double scale;
 
     private List<Body> bodyList = new ArrayList<>();
+    private VelocityTerm term;
 
     public Simulation(String name, int numSteps, int iterationsPerStep, double scale, double dt) {
         this.name = name;
@@ -60,6 +63,12 @@ public class Simulation {
                         a1[0] += -G * bodyFrom.getMass() * dx / (rMag * rMag * rMag);
                         a1[1] += -G * bodyFrom.getMass() * dy / (rMag * rMag * rMag);
                         a1[2] += -G * bodyFrom.getMass() * dz / (rMag * rMag * rMag);
+
+                        if (term != null) {
+                            a1[0] += term.getAx(v0);
+                            a1[1] += term.getAy(v0);
+                            a1[2] += term.getAz(v0);
+                        }
                     }
 
                     r1[0] = r0[0] + v0[0] * dt + 0.5 * a0[0] * dt * dt;
@@ -107,5 +116,13 @@ public class Simulation {
 
     public double getScale() {
         return scale;
+    }
+
+    public void setTerm(VelocityTerm term) {
+        this.term = term;
+    }
+
+    public VelocityTerm getTerm() {
+        return term;
     }
 }

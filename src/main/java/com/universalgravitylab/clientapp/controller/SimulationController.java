@@ -14,10 +14,13 @@ import javafx.scene.effect.Glow;
 import javafx.scene.paint.Color;
 import org.springframework.stereotype.Component;
 
+import java.text.DecimalFormat;
+
 @Component
 public class SimulationController implements Closable {
 
     public static final double AU = 149_597_870_700d;
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     @FXML
     private Slider progressBar;
@@ -87,7 +90,7 @@ public class SimulationController implements Closable {
         gc.save();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        int k = 700;
+        int k = 1700;
         double scale = simulation.getScale();
         for (int i = 0; i < simulation.getBodyList().size(); i++) {
             Body body = simulation.getBodyList().get(i);
@@ -108,6 +111,8 @@ public class SimulationController implements Closable {
 
             String name = body.getName();
             gc.fillText(name, x + 18, y - 6);
+            double velocity = body.getVelocity(pos);
+            gc.fillText(decimalFormat.format(velocity) + " m/s", x + 18, y + 16);
         }
         glow.setLevel(0.5);
         gc.applyEffect(glow);

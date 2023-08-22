@@ -4,6 +4,8 @@ import javafx.scene.paint.Color;
 
 import java.util.Arrays;
 
+import static java.lang.Math.sqrt;
+
 public class Body {
 
     private int numSteps;
@@ -167,5 +169,9 @@ public class Body {
 
     public boolean isStationary() {
         return isStationary;
+    }
+
+    public double getVelocity(int pos) {
+        return sqrt(v[pos][0] * v[pos][0] + v[pos][1] * v[pos][1] + v[pos][2] * v[pos][2]);
     }
 }

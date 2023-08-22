@@ -20,6 +20,7 @@ public class SimulationService implements InitializingBean {
     public static final String DOUBLE_SUN_EARTH_VENUS = "Double Sun/Earth/Venus";
     public static final String DOUBLE_SUN_EARTH_MARS = "Double Sun/Earth/Mars";
     public static final String EARTH_MOON = "Earth/Moon";
+    public static final String EARTH_MOON_SPIRAL = "Earth/Moon/Spiral";
 
     public static double M_SUN = 1.9891e30;   // mass of the Sun
     public static double M_EARTH = 5.9891e24;   // mass of Earth
@@ -87,6 +88,18 @@ public class SimulationService implements InitializingBean {
         bodyList = simulation.getBodyList();
         double totalMass = M_EARTH + M_MOON;
         double rCenter = (M_EARTH * 0 + M_MOON * r) / totalMass;
+        r = r - rCenter;
+        bodyList.add(new Body("Earth", M_EARTH, 6371000, numSteps, new double[]{-rCenter, 0, 0}, new double[]{0, 13, 0}, new double[]{0, 0, 0}, Color.valueOf(earthColor), false, false));
+        bodyList.add(new Body("Moon", M_MOON, 1737400, numSteps, new double[]{r, 0, 0}, new double[]{0, -1080, 0}, new double[]{0, 0, 0}, Color.valueOf(moonColor), false, false));
+        simulationList.add(simulation);
+
+        r = 362_600_000;
+        numSteps = NUM_STEPS * 10;
+        simulation = new Simulation(EARTH_MOON_SPIRAL, numSteps, ITERATIONS_PER_STEP, r / 75.0, 24 * 60 * 5d / ITERATIONS_PER_STEP);
+        bodyList = simulation.getBodyList();
+        simulation.setTerm(new VelocityTerm());
+        totalMass = M_EARTH + M_MOON;
+        rCenter = (M_EARTH * 0 + M_MOON * r) / totalMass;
         r = r - rCenter;
         bodyList.add(new Body("Earth", M_EARTH, 6371000, numSteps, new double[]{-rCenter, 0, 0}, new double[]{0, 13, 0}, new double[]{0, 0, 0}, Color.valueOf(earthColor), false, false));
         bodyList.add(new Body("Moon", M_MOON, 1737400, numSteps, new double[]{r, 0, 0}, new double[]{0, -1080, 0}, new double[]{0, 0, 0}, Color.valueOf(moonColor), false, false));

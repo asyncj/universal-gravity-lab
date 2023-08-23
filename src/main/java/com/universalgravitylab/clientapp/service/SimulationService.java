@@ -21,6 +21,7 @@ public class SimulationService implements InitializingBean {
     public static final String DOUBLE_SUN_EARTH_MARS = "Double Sun/Earth/Mars";
     public static final String EARTH_MOON = "Earth/Moon";
     public static final String EARTH_MOON_SPIRAL = "Earth/Moon/Spiral";
+    public static final String FOUR_STARS = "Four Stars";
 
     public static double M_SUN = 1.9891e30;   // mass of the Sun
     public static double M_EARTH = 5.9891e24;   // mass of Earth
@@ -104,5 +105,14 @@ public class SimulationService implements InitializingBean {
         bodyList.add(new Body("Earth", M_EARTH, 6371000, numSteps, new double[]{-rCenter, 0, 0}, new double[]{0, 13, 0}, new double[]{0, 0, 0}, Color.valueOf(earthColor), false, false));
         bodyList.add(new Body("Moon", M_MOON, 1737400, numSteps, new double[]{r, 0, 0}, new double[]{0, -1080, 0}, new double[]{0, 0, 0}, Color.valueOf(moonColor), false, false));
         simulationList.add(simulation);
+
+        simulation = new Simulation(FOUR_STARS, NUM_STEPS, ITERATIONS_PER_STEP, AU / 100.0, 12 * 60 * 60d / ITERATIONS_PER_STEP);
+        bodyList = simulation.getBodyList();
+        bodyList.add(new Body("Star #1", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, -sunRadius * 50, 0}, new double[]{2.9E4 / 2.5, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+        bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, sunRadius * 50, 0}, new double[]{-2.9E4 / 2.5, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+        bodyList.add(new Body("Star #3", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, -sunRadius * 150, 0}, new double[]{9.9E4 / 2.5, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+        bodyList.add(new Body("Star #4", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, sunRadius * 150, 0}, new double[]{-9.9E4 / 2.5, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+        simulationList.add(simulation);
+
     }
 }

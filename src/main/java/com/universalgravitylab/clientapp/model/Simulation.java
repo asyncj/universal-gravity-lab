@@ -65,9 +65,9 @@ public class Simulation {
                         a1[2] += -G * bodyFrom.getMass() * dz / (rMag * rMag * rMag);
 
                         if (term != null) {
-                            a1[0] += term.getAx(v0);
-                            a1[1] += term.getAy(v0);
-                            a1[2] += term.getAz(v0);
+                            a1[0] += term.getAx(bodyTo);
+                            a1[1] += term.getAy(bodyTo);
+                            a1[2] += term.getAz(bodyTo);
                         }
                     }
 

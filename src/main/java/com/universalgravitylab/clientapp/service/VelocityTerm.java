@@ -1,18 +1,20 @@
 package com.universalgravitylab.clientapp.service;
 
+import com.universalgravitylab.clientapp.model.Body;
+
 public class VelocityTerm {
 
     private static final double MULTIPLIER = 4.2E-9;
 
-    public double getAx(double[] v0) {
-        return v0[0] * MULTIPLIER;
+    public double getAx(Body body) {
+        return body.getV0()[0] * MULTIPLIER;
     }
 
-    public double getAy(double[] v0) {
-        return v0[1] * MULTIPLIER;
+    public double getAy(Body body) {
+        return body.getV0()[1] * MULTIPLIER;
     }
 
-    public double getAz(double[] v0) {
-        return v0[2] * MULTIPLIER;
+    public double getAz(Body body) {
+        return body.getV0()[2] * MULTIPLIER;
     }
 }

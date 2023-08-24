@@ -76,7 +76,7 @@ public class MainController {
                 (observable, oldValue, newValue) -> createTab("simulation")
         );
 
-        treeView.getSelectionModel().select(7);
+        treeView.getSelectionModel().select(8);
     }
 
     @FXML

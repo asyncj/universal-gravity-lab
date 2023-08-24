@@ -5,6 +5,8 @@ import com.universalgravitylab.clientapp.service.VelocityTerm;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.sqrt;
+
 public class Simulation {
 
     private String name;
@@ -19,6 +21,7 @@ public class Simulation {
 
     private List<Body> bodyList = new ArrayList<>();
     private VelocityTerm term;
+    private boolean showLabels = true;
 
     public Simulation(String name, int numSteps, int iterationsPerStep, double scale, double dt) {
         this.name = name;
@@ -58,11 +61,11 @@ public class Simulation {
                         double dy = r0[1] - bodyFrom.getR0()[1];
                         double dz = r0[2] - bodyFrom.getR0()[2];
 
-                        double rMag = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-                        a1[0] += -G * bodyFrom.getMass() * dx / (rMag * rMag * rMag);
-                        a1[1] += -G * bodyFrom.getMass() * dy / (rMag * rMag * rMag);
-                        a1[2] += -G * bodyFrom.getMass() * dz / (rMag * rMag * rMag);
+                        double rMag = sqrt(dx * dx + dy * dy + dz * dz);
+                        double a = G * bodyFrom.getMass() / (rMag * rMag);
+                        a1[0] += -a * dx / rMag;
+                        a1[1] += -a * dy / rMag;
+                        a1[2] += -a * dz / rMag;
 
                         if (term != null) {
                             a1[0] += term.getAx(bodyTo);
@@ -124,5 +127,13 @@ public class Simulation {
 
     public VelocityTerm getTerm() {
         return term;
+    }
+
+    public void setShowLabels(boolean showLabels) {
+        this.showLabels = showLabels;
+    }
+
+    public boolean getShowLabels() {
+        return showLabels;
     }
 }

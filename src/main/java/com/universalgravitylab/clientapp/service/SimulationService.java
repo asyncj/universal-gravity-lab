@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.universalgravitylab.clientapp.controller.SimulationController.AU;
+import static com.universalgravitylab.clientapp.controller.SimulationController.KPC;
+import static com.universalgravitylab.clientapp.model.Simulation.G;
+import static java.lang.Math.sqrt;
 
 @Component
 public class SimulationService implements InitializingBean {
@@ -22,6 +25,7 @@ public class SimulationService implements InitializingBean {
     public static final String EARTH_MOON = "Earth/Moon";
     public static final String EARTH_MOON_SPIRAL = "Earth/Moon/Spiral";
     public static final String FOUR_STARS = "Four Stars";
+    public static final String GALAXY = "Galaxy";
 
     public static double M_SUN = 1.9891e30;   // mass of the Sun
     public static double M_EARTH = 5.9891e24;   // mass of Earth
@@ -112,6 +116,34 @@ public class SimulationService implements InitializingBean {
         bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, sunRadius * 50, 0}, new double[]{-2.9E4 / 2.5, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
         bodyList.add(new Body("Star #3", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, -sunRadius * 150, 0}, new double[]{9.9E4 / 2.5, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
         bodyList.add(new Body("Star #4", M_SUN / 2.0, sunRadius, NUM_STEPS, new double[]{0, sunRadius * 150, 0}, new double[]{-9.9E4 / 2.5, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+        simulationList.add(simulation);
+
+        numSteps = NUM_STEPS;
+        int iterationsPerStep = ITERATIONS_PER_STEP / 100;
+        simulation = new Simulation(GALAXY, numSteps, iterationsPerStep, KPC / 7.0, 500_000d * 365 * 24 * 60 * 60d / iterationsPerStep);
+        simulation.setShowLabels(false);
+        //simulation.setTerm(new VelocityTerm());
+        bodyList = simulation.getBodyList();
+        double bulgeCount = 7.0;
+        double bulgeMass = M_SUN * 6.55E10;
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, KPC * 2.0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{KPC, KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{KPC, -KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{-KPC, KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{-KPC, -KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, -KPC * 2.0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+
+        for (int i = 6; i < 24; i++) {
+            double rStar = KPC * i;
+            double base = sqrt(G * bulgeMass / rStar);
+            double v = base * 1.0;
+            bodyList.add(new Body("Star #1", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{0, -rStar, 0}, new double[]{v, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+            bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{0, rStar, 0}, new double[]{-v, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+            v = base * 1.0;
+            bodyList.add(new Body("Star #3", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{-rStar, 0, 0}, new double[]{0, -v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+            bodyList.add(new Body("Star #4", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{rStar, 0, 0}, new double[]{0, v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+        }
         simulationList.add(simulation);
 
     }

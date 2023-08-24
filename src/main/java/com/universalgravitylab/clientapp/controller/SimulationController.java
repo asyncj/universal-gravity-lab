@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 public class SimulationController implements Closable {
 
     public static final double AU = 149_597_870_700d;
+    public static final double KPC = 3.08567758128E+19;
     DecimalFormat decimalFormat = new DecimalFormat("#,###");
 
     @FXML
@@ -90,7 +91,7 @@ public class SimulationController implements Closable {
         gc.save();
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        int k = 400;
+        int k = 200;
         double scale = simulation.getScale();
         for (int i = 0; i < simulation.getBodyList().size(); i++) {
             Body body = simulation.getBodyList().get(i);
@@ -99,7 +100,7 @@ public class SimulationController implements Closable {
                 if (j > 0) {
                     Color color = body.getColor();
                     double opacity = (pos - j) / (double)k;
-                    gc.setFill(color.deriveColor(0, 1, 1, 1 - opacity));
+                    gc.setFill(color.deriveColor(0, 1, 1, 0.4 - opacity));
                     gc.fillOval(250 + body.getR()[j][0] / scale - 1, 200 + body.getR()[j][1] / scale - 1, 2, 2);
                 }
             }
@@ -109,10 +110,12 @@ public class SimulationController implements Closable {
             double y = 200 + body.getR()[pos][1] / scale - h / 2.0;
             gc.fillOval(x, y, h, h);
 
-            String name = body.getName();
-            gc.fillText(name, x + 18, y - 6);
-            double velocity = body.getVelocity(pos);
-            gc.fillText(decimalFormat.format(velocity) + " m/s", x + 18, y + 16);
+            if (simulation.getShowLabels()) {
+                String name = body.getName();
+                gc.fillText(name, x + 18, y - 6);
+                double velocity = body.getVelocity(pos);
+                gc.fillText(decimalFormat.format(velocity) + " m/s", x + 18, y + 16);
+            }
         }
         glow.setLevel(0.5);
         gc.applyEffect(glow);

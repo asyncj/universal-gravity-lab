@@ -174,4 +174,8 @@ public class Body {
     public double getVelocity(int pos) {
         return sqrt(v[pos][0] * v[pos][0] + v[pos][1] * v[pos][1] + v[pos][2] * v[pos][2]);
     }
+
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
 }

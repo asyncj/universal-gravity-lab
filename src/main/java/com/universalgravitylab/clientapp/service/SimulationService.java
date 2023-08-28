@@ -122,7 +122,7 @@ public class SimulationService implements InitializingBean {
         int iterationsPerStep = ITERATIONS_PER_STEP / 100;
         simulation = new Simulation(GALAXY, numSteps, iterationsPerStep, KPC / 7.0, 500_000d * 365 * 24 * 60 * 60d / iterationsPerStep);
         simulation.setShowLabels(false);
-        //simulation.setTerm(new VelocityTerm());
+        simulation.setTerm(new VelocityTerm());
         bodyList = simulation.getBodyList();
         double bulgeCount = 7.0;
         double bulgeMass = M_SUN * 6.55E10;

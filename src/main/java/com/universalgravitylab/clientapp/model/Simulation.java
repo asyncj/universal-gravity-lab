@@ -73,7 +73,7 @@ public class Simulation {
                             a1[1] += term.getAy(bodyTo);
                             a1[2] += term.getAz(bodyTo);
                         }
-                        bodyFrom.setMass(bodyFrom.getMass() + bodyFrom.getMass() * MULTIPLIER * dt * 2.0);
+                        bodyFrom.setMass(bodyFrom.getMass());// + bodyFrom.getMass() * MULTIPLIER * dt * 2.0);
                     }
 
                     r1[0] = r0[0] + v0[0] * dt + 0.5 * a0[0] * dt * dt;

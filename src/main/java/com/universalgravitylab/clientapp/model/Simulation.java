@@ -4,6 +4,7 @@ import com.universalgravitylab.clientapp.service.VelocityTerm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static com.universalgravitylab.clientapp.service.VelocityTerm.MULTIPLIER;
 import static java.lang.Math.sqrt;
@@ -13,6 +14,7 @@ public class Simulation {
     private String name;
 
     public static final double G = 6.6743e-11;
+    public static final double OMEGA = 4.86E-16;
 
     private int numSteps;
     private int iterationsPerStep;
@@ -34,9 +36,8 @@ public class Simulation {
 
     public void runSimulation() {
         // Perform Verlet integration for remaining time steps
-
         for (int i = 0; i < numSteps ; i++) {
-            for (int j = 0; j < iterationsPerStep; j++)
+            IntStream.range(0, iterationsPerStep).parallel().forEach(j ->
             {
                 for (int m = 0; m < bodyList.size(); m++) {
 
@@ -63,7 +64,7 @@ public class Simulation {
                         double dz = r0[2] - bodyFrom.getR0()[2];
 
                         double rMag = sqrt(dx * dx + dy * dy + dz * dz);
-                        double a = G * bodyFrom.getMass() / (rMag * rMag);
+                        double a = G * bodyFrom.getMass() / (rMag * rMag) + OMEGA * sqrt(G * bodyFrom.getMass() / rMag);
                         a1[0] += -a * dx / rMag;
                         a1[1] += -a * dy / rMag;
                         a1[2] += -a * dz / rMag;
@@ -73,7 +74,7 @@ public class Simulation {
                             a1[1] += term.getAy(bodyTo);
                             a1[2] += term.getAz(bodyTo);
                         }
-                        bodyFrom.setMass(bodyFrom.getMass());// + bodyFrom.getMass() * MULTIPLIER * dt * 2.0);
+                        bodyFrom.setMass(bodyFrom.getMass() + bodyFrom.getMass() * MULTIPLIER * dt * 3.3);
                     }
 
                     r1[0] = r0[0] + v0[0] * dt + 0.5 * a0[0] * dt * dt;
@@ -96,8 +97,7 @@ public class Simulation {
                     bodyTo.setA1(a0);
                     bodyTo.setA0(tmp);
                 }
-
-            }
+            });
 
             for (int k = 0; k < bodyList.size(); k++) {
                 Body body = bodyList.get(k);

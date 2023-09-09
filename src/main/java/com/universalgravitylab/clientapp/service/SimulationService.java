@@ -12,6 +12,7 @@ import java.util.List;
 import static com.universalgravitylab.clientapp.controller.SimulationController.AU;
 import static com.universalgravitylab.clientapp.controller.SimulationController.KPC;
 import static com.universalgravitylab.clientapp.model.Simulation.G;
+import static com.universalgravitylab.clientapp.model.Simulation.OMEGA;
 import static java.lang.Math.*;
 
 @Component
@@ -157,29 +158,32 @@ public class SimulationService implements InitializingBean {
         }
         simulationList.add(simulation);
 
-        numSteps = NUM_STEPS;
-        iterationsPerStep = ITERATIONS_PER_STEP / 100;
-        simulation = new Simulation(GALAXY, numSteps, iterationsPerStep, KPC / 7.0, 500_000d * 365 * 24 * 60 * 60d / iterationsPerStep);
+        numSteps = NUM_STEPS / 2;
+        iterationsPerStep = ITERATIONS_PER_STEP / 50;
+        simulation = new Simulation(GALAXY, numSteps, iterationsPerStep, KPC / 7.0, 200_000d * 365 * 24 * 60 * 60d / iterationsPerStep);
         simulation.setShowLabels(false);
         simulation.setTerm(new VelocityTerm());
         bodyList = simulation.getBodyList();
         bulgeCount = 9.0;
         bulgeMass = M_SUN * 6.55E10;
+        double baseV = sqrt(G * bulgeMass / KPC);
         bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
-        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, KPC * 2.0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
-        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{KPC * 2.0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, KPC * 2.0, 0}, new double[]{baseV, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, KPC * 3.0, 0}, new double[]{baseV, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+//        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{KPC * 2.0, 0, 0}, new double[]{0, baseV, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
         bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{KPC, KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
         bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{KPC, -KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
         bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{-KPC, KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
         bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{-KPC, -KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
         bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, -KPC * 2.0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
-        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{-KPC * 2.0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, -KPC * 3.0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
+//        bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{-KPC * 2.0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
 
-        for (int i = 8; i < 48 + 6; i++) {
+        for (int i = 8; i < 128 + 6; i++) {
             double alpha = i / 2.0 / PI;
             double rStar = KPC * (i / 4.0 + 6);
-            double base = sqrt(G * bulgeMass / rStar);
-            double v = base * 0.8;
+            double base = sqrt(G * bulgeMass / rStar + OMEGA * sqrt(G * bulgeMass * rStar));
+            double v = base * 1.2;
             bodyList.add(new Body("Star #1", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{-rStar * sin(alpha), -rStar * cos(alpha), 0}, new double[]{v * cos(alpha), -v * sin(alpha), 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
             bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{rStar * sin(alpha), rStar * cos(alpha), 0}, new double[]{-v * cos(alpha), v * sin(alpha), 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
         }

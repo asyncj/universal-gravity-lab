@@ -4,7 +4,6 @@ import com.universalgravitylab.clientapp.service.VelocityTerm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static com.universalgravitylab.clientapp.service.VelocityTerm.MULTIPLIER;
 import static java.lang.Math.sqrt;
@@ -37,8 +36,7 @@ public class Simulation {
     public void runSimulation() {
         // Perform Verlet integration for remaining time steps
         for (int i = 0; i < numSteps ; i++) {
-            IntStream.range(0, iterationsPerStep).parallel().forEach(j ->
-            {
+            for (int j = 0; j < iterationsPerStep ; j++) {
                 for (int m = 0; m < bodyList.size(); m++) {
 
                     Body bodyTo = bodyList.get(m);
@@ -69,12 +67,12 @@ public class Simulation {
                         a1[1] += -a * dy / rMag;
                         a1[2] += -a * dz / rMag;
 
-                        if (term != null) {
-                            a1[0] += term.getAx(bodyTo);
-                            a1[1] += term.getAy(bodyTo);
-                            a1[2] += term.getAz(bodyTo);
-                        }
-                        bodyFrom.setMass(bodyFrom.getMass() + bodyFrom.getMass() * MULTIPLIER * dt * 3.3);
+                    }
+                    bodyTo.setMass(bodyTo.getMass() + bodyTo.getMass() * MULTIPLIER * dt * 4.0 / 3.0);
+                    if (term != null) {
+                        a1[0] += term.getAx(bodyTo);
+                        a1[1] += term.getAy(bodyTo);
+                        a1[2] += term.getAz(bodyTo);
                     }
 
                     r1[0] = r0[0] + v0[0] * dt + 0.5 * a0[0] * dt * dt;
@@ -97,7 +95,7 @@ public class Simulation {
                     bodyTo.setA1(a0);
                     bodyTo.setA0(tmp);
                 }
-            });
+            }
 
             for (int k = 0; k < bodyList.size(); k++) {
                 Body body = bodyList.get(k);

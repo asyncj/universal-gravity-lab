@@ -28,6 +28,7 @@ public class SimulationService implements InitializingBean {
     public static final String EARTH_MOON_SPIRAL = "Earth/Moon/Spiral";
     public static final String FOUR_STARS = "Four Stars";
     public static final String GALAXY = "Galaxy";
+    public static final String SPIRAL_GALAXY = "Spiral Galaxy";
 
     public static double M_SUN = 1.9891e30;   // mass of the Sun
     public static double M_EARTH = 5.9891e24;   // mass of Earth
@@ -110,16 +111,17 @@ public class SimulationService implements InitializingBean {
         bodyList.add(new Body("Moon", M_MOON, 1737400, numSteps, new double[]{r, 0, 0}, new double[]{0, -1080, 0}, new double[]{0, 0, 0}, Color.valueOf(moonColor), false, false));
         simulationList.add(simulation);
 
-        r = 362_600_000;
-        numSteps = NUM_STEPS * 10;
-        simulation = new Simulation(EARTH_MOON_SPIRAL, numSteps, ITERATIONS_PER_STEP, r / 75.0, 24 * 60 * 5d / ITERATIONS_PER_STEP);
+        r = 385_600_000;
+        numSteps = NUM_STEPS;
+        simulation = new Simulation(EARTH_MOON_SPIRAL, numSteps, ITERATIONS_PER_STEP, r / 75.0, 24 * 60 * 10d / (double) ITERATIONS_PER_STEP);
         bodyList = simulation.getBodyList();
         simulation.setTerm(new VelocityTerm());
         totalMass = M_EARTH + M_MOON;
         rCenter = (M_EARTH * 0 + M_MOON * r) / totalMass;
-        r = r - rCenter;
+        //r = r - rCenter;
+        double moonV = sqrt(G * M_EARTH / r + OMEGA * sqrt(G * M_EARTH * r));
         bodyList.add(new Body("Earth", M_EARTH, 6371000, numSteps, new double[]{-rCenter, 0, 0}, new double[]{0, 13, 0}, new double[]{0, 0, 0}, Color.valueOf(earthColor), false, false));
-        bodyList.add(new Body("Moon", M_MOON, 1737400, numSteps, new double[]{r, 0, 0}, new double[]{0, -1080, 0}, new double[]{0, 0, 0}, Color.valueOf(moonColor), false, false));
+        bodyList.add(new Body("Moon", M_MOON, 1737400, numSteps, new double[]{r - rCenter, 0, 0}, new double[]{0, -moonV, 0}, new double[]{0, 0, 0}, Color.valueOf(moonColor), false, false));
         simulationList.add(simulation);
 
         simulation = new Simulation(FOUR_STARS, NUM_STEPS, ITERATIONS_PER_STEP, AU / 100.0, 12 * 60 * 60d / ITERATIONS_PER_STEP);
@@ -148,7 +150,7 @@ public class SimulationService implements InitializingBean {
 
         for (int i = 6; i < 24; i++) {
             double rStar = KPC * i;
-            double base = sqrt(G * bulgeMass / rStar);
+            double base = sqrt(G * bulgeMass / rStar + OMEGA * sqrt(G * bulgeMass * rStar));
             double v = base * 1.0;
             bodyList.add(new Body("Star #1", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{0, -rStar, 0}, new double[]{v, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
             bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{0, rStar, 0}, new double[]{-v, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
@@ -159,8 +161,8 @@ public class SimulationService implements InitializingBean {
         simulationList.add(simulation);
 
         numSteps = NUM_STEPS / 2;
-        iterationsPerStep = ITERATIONS_PER_STEP / 50;
-        simulation = new Simulation(GALAXY, numSteps, iterationsPerStep, KPC / 7.0, 200_000d * 365 * 24 * 60 * 60d / iterationsPerStep);
+        iterationsPerStep = ITERATIONS_PER_STEP / 500;
+        simulation = new Simulation(SPIRAL_GALAXY, numSteps, iterationsPerStep, KPC / 7.0, 2_000_000d * 365 * 24 * 60 * 60d / (double)iterationsPerStep);
         simulation.setShowLabels(false);
         simulation.setTerm(new VelocityTerm());
         bodyList = simulation.getBodyList();

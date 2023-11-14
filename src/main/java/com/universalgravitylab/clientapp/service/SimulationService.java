@@ -11,8 +11,7 @@ import java.util.List;
 
 import static com.universalgravitylab.clientapp.controller.SimulationController.AU;
 import static com.universalgravitylab.clientapp.controller.SimulationController.KPC;
-import static com.universalgravitylab.clientapp.model.Simulation.G;
-import static com.universalgravitylab.clientapp.model.Simulation.OMEGA;
+import static com.universalgravitylab.clientapp.model.Simulation.*;
 import static java.lang.Math.*;
 
 @Component
@@ -148,15 +147,15 @@ public class SimulationService implements InitializingBean {
         bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{-KPC, -KPC, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
         bodyList.add(new Body("Bulge", bulgeMass / bulgeCount, sunRadius / 100.0, numSteps, new double[]{0, -KPC * 2.0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, true));
 
-        for (int i = 6; i < 24; i++) {
+        for (int i = 6; i < 32; i++) {
             double rStar = KPC * i;
-            double base = sqrt(G * bulgeMass / rStar + OMEGA * sqrt(G * bulgeMass * rStar));
-            double v = base * 1.0;
+            double base = sqrt(G * bulgeMass / rStar + OMEGA * sqrt(G * bulgeMass * rStar) + 2 * PI * G * G * bulgeMass * bulgeMass / C2 / rStar / rStar);
+            double v = base * 1;
             bodyList.add(new Body("Star #1", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{0, -rStar, 0}, new double[]{v, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
             bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{0, rStar, 0}, new double[]{-v, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
-            v = base * 1.0;
-            bodyList.add(new Body("Star #3", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{-rStar, 0, 0}, new double[]{0, -v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
-            bodyList.add(new Body("Star #4", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{rStar, 0, 0}, new double[]{0, v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+        //    v = base * 1.0;
+//            bodyList.add(new Body("Star #3", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{-rStar, 0, 0}, new double[]{0, -v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+  //          bodyList.add(new Body("Star #4", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{rStar, 0, 0}, new double[]{0, v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
         }
         simulationList.add(simulation);
 
@@ -184,7 +183,7 @@ public class SimulationService implements InitializingBean {
         for (int i = 8; i < 128 + 6; i++) {
             double alpha = i / 2.0 / PI;
             double rStar = KPC * (i / 4.0 + 6);
-            double base = sqrt(G * bulgeMass / rStar + OMEGA * sqrt(G * bulgeMass * rStar));
+            double base = sqrt(G * bulgeMass / rStar + OMEGA * sqrt(G * bulgeMass * rStar) + 2 * PI * G * G * bulgeMass * bulgeMass / C2 / rStar / rStar);
             double v = base * 1.2;
             bodyList.add(new Body("Star #1", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{-rStar * sin(alpha), -rStar * cos(alpha), 0}, new double[]{v * cos(alpha), -v * sin(alpha), 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
             bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{rStar * sin(alpha), rStar * cos(alpha), 0}, new double[]{-v * cos(alpha), v * sin(alpha), 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));

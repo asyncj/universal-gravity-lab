@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.universalgravitylab.clientapp.service.VelocityTerm.MULTIPLIER;
+import static java.lang.Math.PI;
 import static java.lang.Math.sqrt;
 
 public class Simulation {
 
+    public static final double C2 = 299792458d * 299792458d;// * 0.000005;
     private String name;
 
     public static final double G = 6.6743e-11;
@@ -35,8 +37,8 @@ public class Simulation {
 
     public void runSimulation() {
         // Perform Verlet integration for remaining time steps
-        for (int i = 0; i < numSteps ; i++) {
-            for (int j = 0; j < iterationsPerStep ; j++) {
+        for (int i = 0; i < numSteps; i++) {
+            for (int j = 0; j < iterationsPerStep; j++) {
                 for (int m = 0; m < bodyList.size(); m++) {
 
                     Body bodyTo = bodyList.get(m);
@@ -62,7 +64,7 @@ public class Simulation {
                         double dz = r0[2] - bodyFrom.getR0()[2];
 
                         double rMag = sqrt(dx * dx + dy * dy + dz * dz);
-                        double a = G * bodyFrom.getMass() / (rMag * rMag) + OMEGA * sqrt(G * bodyFrom.getMass() / rMag);
+                        double a = G * bodyFrom.getMass() / (rMag * rMag) + OMEGA * sqrt(G * bodyFrom.getMass() / rMag) + 2 * PI * G * G / C2 * bodyFrom.getMass() * bodyFrom.getMass() / (rMag * rMag * rMag);
                         a1[0] += -a * dx / rMag;
                         a1[1] += -a * dy / rMag;
                         a1[2] += -a * dz / rMag;

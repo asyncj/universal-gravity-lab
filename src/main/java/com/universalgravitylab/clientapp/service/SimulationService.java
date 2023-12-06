@@ -19,6 +19,7 @@ public class SimulationService implements InitializingBean {
     public static final int NUM_STEPS = 3_000;     // number of iterations
 
     public static final String SUN_EARTH = "Sun/Earth";
+    public static final String SUN_MERCURY = "Sun/Mercury";
     public static final String DOUBLE_SUN_EARTH = "Double Sun/Earth";
     public static final String DOUBLE_SUN_EARTH_VENUS = "Double Sun/Earth/Venus";
     public static final String DOUBLE_SUN_EARTH_MARS = "Double Sun/Earth/Mars";
@@ -30,9 +31,10 @@ public class SimulationService implements InitializingBean {
     public static final String SPIRAL_GALAXY = "Spiral Galaxy";
 
     public static double M_SUN = 1.9891e30;   // mass of the Sun
+    public static double M_MERCURY = 3.30200e23;   // mass of Mercury
+    public static double M_VENUS = 4.867e24;   // mass of Venus
     public static double M_EARTH = 5.9891e24;   // mass of Earth
     public static double M_MOON = 7.342e22;   // mass of Moon
-    public static double M_VENUS = 4.867e24;   // mass of Venus
     public static double M_MARS = 6.39e23;   // mass of Mars
     public static final int ITERATIONS_PER_STEP = 10000;
 
@@ -53,9 +55,10 @@ public class SimulationService implements InitializingBean {
         List<Body> bodyList = simulation.getBodyList();
         double sunRadius = 6.957E8;
         String sunColor = "#FDB813";
+        String mercuryColor = "#ADA8A5";
+        String venusColor = "#8B7D82";
         String earthColor = "#006994";
         String moonColor = "#F7EAC6";
-        String venusColor = "#8B7D82";
         String marsColor = "#AD6242";
 
         bodyList.add(new Body("Sun", M_SUN, sunRadius, NUM_STEPS, new double[]{0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
@@ -118,7 +121,7 @@ public class SimulationService implements InitializingBean {
         totalMass = M_EARTH + M_MOON;
         rCenter = (M_EARTH * 0 + M_MOON * r) / totalMass;
         //r = r - rCenter;
-        double moonV = sqrt(G * M_EARTH / r + OMEGA * sqrt(G * M_EARTH * r));
+        double moonV = sqrt(G * M_EARTH / r + H_0 * r * sqrt(sqrt(G * M_EARTH / r * C2)));
         bodyList.add(new Body("Earth", M_EARTH, 6371000, numSteps, new double[]{-rCenter, 0, 0}, new double[]{0, 13, 0}, new double[]{0, 0, 0}, Color.valueOf(earthColor), false, false));
         bodyList.add(new Body("Moon", M_MOON, 1737400, numSteps, new double[]{r - rCenter, 0, 0}, new double[]{0, -moonV, 0}, new double[]{0, 0, 0}, Color.valueOf(moonColor), false, false));
         simulationList.add(simulation);
@@ -149,19 +152,19 @@ public class SimulationService implements InitializingBean {
 
         for (int i = 6; i < 32; i++) {
             double rStar = KPC * i;
-            double base = sqrt(G * bulgeMass / rStar + OMEGA * sqrt(G * bulgeMass * rStar) + 2 * PI * G * G * bulgeMass * bulgeMass / C2 / rStar / rStar);
-            double v = base * 1;
+            double base = sqrt(G * bulgeMass / rStar + H_0 * rStar * sqrt(sqrt(G * M_EARTH / rStar * C2)) + 2 * PI * G * G * bulgeMass * bulgeMass / C2 / rStar / rStar);
+            double v = base * 1.4;
             bodyList.add(new Body("Star #1", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{0, -rStar, 0}, new double[]{v, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
             bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{0, rStar, 0}, new double[]{-v, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
-        //    v = base * 1.0;
-//            bodyList.add(new Body("Star #3", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{-rStar, 0, 0}, new double[]{0, -v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
-  //          bodyList.add(new Body("Star #4", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{rStar, 0, 0}, new double[]{0, v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+            v = base * 1.0;
+            //bodyList.add(new Body("Star #3", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{-rStar, 0, 0}, new double[]{0, -v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+            //bodyList.add(new Body("Star #4", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{rStar, 0, 0}, new double[]{0, v, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
         }
         simulationList.add(simulation);
 
         numSteps = NUM_STEPS / 2;
         iterationsPerStep = ITERATIONS_PER_STEP / 500;
-        simulation = new Simulation(SPIRAL_GALAXY, numSteps, iterationsPerStep, KPC / 7.0, 2_000_000d * 365 * 24 * 60 * 60d / (double)iterationsPerStep);
+        simulation = new Simulation(SPIRAL_GALAXY, numSteps, iterationsPerStep, KPC / 7.0, 2_000_000d * 365 * 24 * 60 * 60d / (double) iterationsPerStep);
         simulation.setShowLabels(false);
         simulation.setTerm(new VelocityTerm());
         bodyList = simulation.getBodyList();
@@ -183,12 +186,22 @@ public class SimulationService implements InitializingBean {
         for (int i = 8; i < 128 + 6; i++) {
             double alpha = i / 2.0 / PI;
             double rStar = KPC * (i / 4.0 + 6);
-            double base = sqrt(G * bulgeMass / rStar + OMEGA * sqrt(G * bulgeMass * rStar) + 2 * PI * G * G * bulgeMass * bulgeMass / C2 / rStar / rStar);
-            double v = base * 1.2;
+            double base = sqrt(G * bulgeMass / rStar + H_0 * rStar * sqrt(sqrt(G * M_EARTH / rStar * C2)) + 2 * PI * G * G * bulgeMass * bulgeMass / C2 / rStar / rStar);
+            double v = base * 1.0;
             bodyList.add(new Body("Star #1", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{-rStar * sin(alpha), -rStar * cos(alpha), 0}, new double[]{v * cos(alpha), -v * sin(alpha), 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
             bodyList.add(new Body("Star #2", M_SUN / 2.0, sunRadius / 1000.0, numSteps, new double[]{rStar * sin(alpha), rStar * cos(alpha), 0}, new double[]{-v * cos(alpha), v * sin(alpha), 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
         }
         simulationList.add(simulation);
+
+        double rMercury = 69.818e9;
+        numSteps = NUM_STEPS * 5;
+        iterationsPerStep = ITERATIONS_PER_STEP;
+        simulation = new Simulation(SUN_MERCURY, numSteps, iterationsPerStep, AU / 200.0, 24 * 60 * 60d / iterationsPerStep);
+        bodyList = simulation.getBodyList();
+        bodyList.add(new Body("Sun", M_SUN, sunRadius, numSteps, new double[]{0, 0, 0}, new double[]{0, 0, 0}, new double[]{0, 0, 0}, Color.valueOf(sunColor), true, false));
+        bodyList.add(new Body("Mercury", M_MERCURY, 2439700d, numSteps, new double[]{rMercury, 0, 0}, new double[]{0, 38860, 0}, new double[]{0, 0, 0}, Color.valueOf(mercuryColor), false, false));
+        simulationList.add(simulation);
+
 
     }
 }

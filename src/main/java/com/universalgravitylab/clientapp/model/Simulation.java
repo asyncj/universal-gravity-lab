@@ -11,11 +11,11 @@ import static java.lang.Math.sqrt;
 
 public class Simulation {
 
-    public static final double C2 = 299792458d * 299792458d;// * 0.000005;
+    public static final double C2 = 299792458d * 299792458d;
     private String name;
 
     public static final double G = 6.6743e-11;
-    public static final double OMEGA = 4.86E-16;
+    public static final double H_0 = 2.2E-18;
 
     private int numSteps;
     private int iterationsPerStep;
@@ -64,7 +64,7 @@ public class Simulation {
                         double dz = r0[2] - bodyFrom.getR0()[2];
 
                         double rMag = sqrt(dx * dx + dy * dy + dz * dz);
-                        double a = G * bodyFrom.getMass() / (rMag * rMag) + OMEGA * sqrt(G * bodyFrom.getMass() / rMag) + 2 * PI * G * G / C2 * bodyFrom.getMass() * bodyFrom.getMass() / (rMag * rMag * rMag);
+                        double a = G * bodyFrom.getMass() / (rMag * rMag) + H_0 * sqrt(sqrt(G * bodyFrom.getMass() / rMag * C2)) + 2 * PI * G * G / C2 * bodyFrom.getMass() * bodyFrom.getMass() / (rMag * rMag * rMag);
                         a1[0] += -a * dx / rMag;
                         a1[1] += -a * dy / rMag;
                         a1[2] += -a * dz / rMag;
